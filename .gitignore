@@ -16,3 +16,44 @@ secrets.json
 credentials.*
 .id_rsa
 .id_rsa.pub
+
+# Jupyter Notebook files - can contain sensitive data
+*.ipynb
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+
+# Node.js files - if applicable
+node_modules/
+.npm/
+.yarn/
+
+# Package files
+*.deb
+*.rpm
+*.tar
+*.tar.gz
+*.zip
+*.egg
+*.whl
+*.gem
+
+# Logs
+*.log
+*.err
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.idea/
+.vscode/
+*.swp
+
+# Temporary files
+tmp/
+temp/
