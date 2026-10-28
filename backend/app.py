@@ -47,7 +47,7 @@ from logger_db import (
     get_all_tg_sessions, get_tg_session_prompts
 )
 from session_manager import session_manager
-from ai_client import init_client, get_aria_response, _is_client_ready
+from ai_client import init_client, get_aria_response, get_chronos_response, _is_client_ready
 from config import (
     CATEGORIES, DEFEATED_LINES, ALL_REVEALED_LINES,
     ARIA_INTRO, MAX_HISTORY_TURNS, MAX_CONFIRM_ATTEMPTS,
@@ -942,6 +942,16 @@ def tg_round2_prompt():
     result = session.process_prompt(prompt)
     if "error" in result:
         return jsonify(result), 400
+    if result.get("timed_out"):
+        return jsonify(result)
+
+    # CHRONOS uses Groq for its in-character response. The model receives only
+    # the latest untrusted prompt; the deterministic engine owns and appends
+    # the approved clue, so Groq cannot unlock or invent protocol information.
+    approved_reply = result.get("chronos_reply", "")
+    result["chronos_reply"], result["chronos_api_fallback"] = get_chronos_response(
+        prompt, approved_reply
+    )
 
     # Log prompt in database
     eval_dict = result.get("evaluation") or {}
