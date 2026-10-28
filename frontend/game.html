@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TIMEGLITCH: The Lost Space Transmission — AAROHAN '26</title>
+  <meta name="description"
+    content="Aarohan '26 Space-Themed Prompt Engineering Challenge — Repair the space timeline and engineer prompts to recover the encrypted Mars transmission." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/timeglitch.css" />
+  <style>
+    /* Top Bar Navigation link - Preserved from existing layout */
+    .game-nav-bar {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .game-nav-link {
+      padding: 6px 14px;
+      background: rgba(16, 23, 37, 0.85);
+      border: 1px solid rgba(0, 200, 255, 0.3);
+      border-radius: 20px;
+      color: #91a0b8;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      font-family: 'Share Tech Mono', monospace;
+      transition: all 0.2s;
+    }
+
+    .game-nav-link:hover {
+      color: #00c8ff;
+      border-color: #00c8ff;
+      box-shadow: 0 0 10px rgba(0, 200, 255, 0.3);
+    }
+  </style>
+</head>
+
+<body style="margin: 0; padding: 0; background: #03060d;">
+
+  <!-- Top Hub Navigation -->
+  <div class="game-nav-bar">
+    <a href="index.html" class="game-nav-link">📝 REGISTRATION</a>
+  </div>
+
+  <!-- Main Timeglitch Game Container -->
+  <div id="timeglitch-app" class="timeglitch-game">
+    <div class="tg-starfield"></div>
+
+    <div class="tg-container">
+
+      <!-- HUD Top Bar -->
+      <div class="tg-hud-bar">
+        <div class="tg-hud-unit">
+          <div class="tg-mission-badge">
+            <span class="tg-pulse-dot"></span>
+            <span>TIMEGLITCH // STATION 01</span>
+          </div>
+          <div id="tg-hud-team" class="tg-team-tag">UNASSIGNED UNIT</div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div id="tg-hud-score" class="tg-score-pill" style="display: none;"></div>
+          <div id="tg-hud-timer" class="tg-timer-pill" style="display: none;">TIME: 10:00</div>
+        </div>
+      </div>
+
+      <!-- ================================================================
+           SCREEN 2: ROUND 1 — REPAIR THE SPACE TIMELINE (50 MARKS)
+           ================================================================ -->
+      <div id="tg-screen-round1" style="display: none;">
+
+        <!-- Storyline Briefing -->
+        <div class="tg-mission-header">
+          <div class="tg-round-title">
+            <span>ROUND 1 // REPAIR THE SPACE TIMELINE</span>
+
+          </div>
+          <div class="tg-story-text">
+            <strong>MISSION INCIDENT:</strong> A severe TIMEGLITCH has corrupted the deep space telemetry database.
+            Five pivotal space exploration milestones have had their temporal anchors scrambled.
+            Your team must restore chronological equilibrium by ordering all five milestones from earliest to latest.
+            Once repaired, the system will unlock the encrypted transmission archive from Mars.
+          </div>
+        </div>
+
+        <!-- Timeline Controls & Feedback -->
+        <div class="tg-timeline-controls">
+          <div class="tg-direction-arrow">
+            <span>CHRONOLOGICAL AXIS:</span>
+            <span>EARLIEST (1950s) ───────────────► RECENT (2010s)</span>
+          </div>
+
+          <div style="display: flex; gap: 14px; align-items: center;">
+            <div id="tg-r1-attempts"
+              style="font-family: var(--tg-font-mono); font-size: 12px; color: var(--tg-text-dim);">Attempts: 0</div>
+            <div id="tg-r1-score" style="display: none;"></div>
+            <span id="tg-r1-timer-digits" class="tg-timer-pill">10:00</span>
+          </div>
+        </div>
+
+        <div id="tg-r1-alert" class="tg-alert" style="display: none;"></div>
+
+        <!-- 5 Chronological Timeline Slots -->
+        <div id="tg-slots-container" class="tg-slots-container">
+          <!-- Injected dynamically via JS -->
+        </div>
+
+        <!-- Unplaced Milestone Cards Deck -->
+        <div class="tg-cards-deck">
+          <div class="tg-deck-title">SCRAMBLED MILESTONE CARDS (DRAG INTO SLOTS OR CLICK CARD THEN SLOT)</div>
+          <div id="tg-cards-deck" class="tg-deck-grid">
+            <!-- Injected dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Submission Actions -->
+        <div style="display: flex; gap: 14px; justify-content: flex-end; align-items: center; margin-top: 20px;">
+          <button type="button" id="tg-btn-reset-timeline" class="tg-btn tg-btn-secondary">
+            ↺ RECALL ALL CARDS
+          </button>
+          <button type="button" id="tg-btn-submit-timeline" class="tg-btn tg-btn-primary" disabled>
+            SUBMIT TIMELINE
+          </button>
+          <button type="button" id="tg-btn-proceed-r2" class="tg-btn tg-btn-primary" style="display: none;">
+            PROCEED TO ROUND 2: MARS TRANSMISSION →
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ================================================================
+           SCREEN 3: ROUND 2 — ENGINEER THE PERFECT PROMPT (50 MARKS)
+           ================================================================ -->
+      <div id="tg-screen-round2" style="display: none;">
+
+        <!-- Briefing Header -->
+        <div class="tg-mission-header">
+          <div class="tg-round-title">
+            <span>ROUND 2 // ENGINEER THE PERFECT PROMPT</span>
+
+          </div>
+          <div class="tg-story-text">
+            <strong>RECOVER THE LOST SPACE TRANSMISSION:</strong> A damaged transmission has been recovered from the
+            Mars mission archive.
+            The original transmission instructions are missing. Use the AI assistant to investigate the message and
+            recover its original meaning.
+            Experiment with your prompts, examine the responses, and refine your instructions to complete the mission.
+          </div>
+        </div>
+
+        <div class="tg-round2-container">
+
+          <!-- Left Column: CHRONOS AI Chat Panel -->
+          <div class="tg-chat-panel">
+            <div class="tg-chat-header">
+              <div class="tg-chat-title">
+                <span class="tg-pulse-dot"></span>
+                <span>CHRONOS AI // MARS ARCHIVE TERMINAL</span>
+              </div>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <span id="tg-r2-prompt-count"
+                  style="font-family: var(--tg-font-mono); font-size: 11px; color: var(--tg-text-dim);">Prompts:
+                  0</span>
+                <span id="tg-r2-timer-digits" class="tg-timer-pill">10:00</span>
+              </div>
+            </div>
+
+            <!-- Chat Message History -->
+            <div id="tg-chat-history" class="tg-chat-history">
+              <!-- Injected dynamically via JS -->
+            </div>
+
+            <!-- Input Zone -->
+            <div class="tg-input-zone">
+              <textarea id="tg-prompt-input" class="tg-textarea"
+                placeholder="Instruct CHRONOS AI with a specific prompt to investigate the encrypted transmission..."
+                maxlength="1000"></textarea>
+              <div class="tg-input-bar">
+                <span id="tg-char-count" class="tg-char-counter">0 / 1000</span>
+                <button type="button" id="tg-btn-send-prompt" class="tg-btn tg-btn-primary" disabled>
+                  SEND PROMPT →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Encrypted Transmission & Live Prompt Analysis -->
+          <div class="tg-intel-sidebar">
+
+            <!-- Transmission Card -->
+            <div class="tg-transmission-card">
+              <div class="tg-transmission-title">
+                <span>📡 ENCRYPTED TRANSMISSION</span>
+                <span style="font-size: 10px; color: var(--tg-text-dim);">[ MARS ARCHIVE ]</span>
+              </div>
+              <div class="tg-ciphertext-box">YVCLY IVZWB</div>
+            </div>
+
+            <!-- 5 Criteria Checklist -->
+            <div id="tg-criteria-list" class="tg-criteria-list">
+              <div class="tg-criteria-item">
+                <span>1. Clear Task (Decode/Decrypt)</span>
+                <span class="tg-criteria-score score-0">○ PENDING</span>
+              </div>
+              <div class="tg-criteria-item">
+                <span>2. Useful Context (Cipher & Key 3)</span>
+                <span class="tg-criteria-score score-0">○ PENDING</span>
+              </div>
+              <div class="tg-criteria-item">
+                <span>3. Constraints (Backward & Spacing)</span>
+                <span class="tg-criteria-score score-0">○ PENDING</span>
+              </div>
+              <div class="tg-criteria-item">
+                <span>4. Output Instructions (Format)</span>
+                <span class="tg-criteria-score score-0">○ PENDING</span>
+              </div>
+              <div class="tg-criteria-item">
+                <span>5. Refinement & Iteration</span>
+                <span class="tg-criteria-score score-0">○ PENDING</span>
+              </div>
+            </div>
+
+            <!-- Actionable Suggestion -->
+            <div id="tg-eval-suggestion" class="tg-suggestion-box">
+              Awaiting your first prompt directive. Formulate a prompt specifying the cipher algorithm, shift value,
+              direction, and desired output format.
+            </div>
+          </div>
+
+
+          <!-- 5-Minute Hint System (unlocks after 300s active play) -->
+          <div id="tg-hint-area" style="display:none;">
+            <div class="tg-eval-card" style="border-color: rgba(255,200,0,0.3);">
+              <div class="tg-eval-title" style="color: #ffc107;">
+                <span>⚠ MISSION HINT AVAILABLE</span>
+              </div>
+              <div id="tg-hint-content"
+                style="display:none; font-family: var(--tg-font-mono); font-size: 12px; color: var(--tg-text-dim); line-height: 1.6; padding: 10px 0;">
+                The message may have been transformed using a letter-based code. Examine the patterns in the encrypted
+                words and experiment with different ways of asking the AI to investigate them.
+              </div>
+              <button id="tg-hint-btn" type="button" class="tg-btn tg-btn-primary"
+                style="width:100%; margin-top: 8px; background: rgba(255,200,0,0.1); border-color: rgba(255,200,0,0.4); color: #ffc107;">
+                REVEAL HINT
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================================================================
+         MISSION DEBRIEFING MODAL (COMPLETION STATE)
+         ================================================================ -->
+  <div id="tg-debrief-modal" class="tg-debrief-modal" style="display: none;">
+    <div class="tg-debrief-card">
+      <div class="tg-debrief-icon">🚀</div>
+      <div id="tg-debrief-title" class="tg-debrief-title">MISSION ACCOMPLISHED</div>
+      <div id="tg-debrief-subtitle" class="tg-debrief-sub">
+        TIMEGLITCH RESOLVED · MARS TELEMETRY RESTORED
+      </div>
+
+      <div style="margin-bottom: 22px;">
+        <div style="font-family: var(--tg-font-mono); font-size: 11px; color: var(--tg-text-dim); margin-bottom: 6px;">
+          RECOVERED TRANSMISSION</div>
+        <div id="tg-debrief-decoded-msg"
+          style="font-family: var(--tg-font-mono); font-size: 18px; letter-spacing: 2px;">
+          "THE ROVER IS READY"
+        </div>
+      </div>
+
+      <!-- Mission Outcome Status Cards -->
+      <div class="tg-score-breakdown-grid">
+        <div class="tg-breakdown-box">
+          <div id="tg-debrief-r1-score" class="tg-breakdown-val" style="font-size: 16px; color: var(--tg-green);">
+            RESTORED</div>
+          <div class="tg-breakdown-label">ROUND 1 TIMELINE</div>
+        </div>
+        <div class="tg-breakdown-box">
+          <div id="tg-debrief-r2-score" class="tg-breakdown-val" style="font-size: 16px; color: var(--tg-cyan);">DECODED
+          </div>
+          <div class="tg-breakdown-label">ROUND 2 PROMPT</div>
+        </div>
+        <div class="tg-breakdown-box" style="border-color: var(--tg-green); background: rgba(0, 255, 157, 0.08);">
+          <div id="tg-debrief-total-score" class="tg-breakdown-val" style="font-size: 16px; color: var(--tg-green);">
+            CLEARED</div>
+          <div class="tg-breakdown-label">MISSION STATUS</div>
+        </div>
+      </div>
+      <div style="font-family: var(--tg-font-mono); font-size: 11.5px; color: var(--tg-text-dim); margin: 12px 0 20px;">
+        Mission telemetry successfully archived. Final tournament scoring and rankings are recorded in Central Command.
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button type="button" id="tg-btn-close-debrief" class="tg-btn tg-btn-secondary">
+          VIEW ARENA LOGS
+        </button>
+        <a href="index.html" class="tg-btn tg-btn-primary">
+          REGISTER ANOTHER UNIT →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <script src="js/timeglitch-session.js"></script>
+  <script src="js/timeglitch.js"></script>
+</body>
+
+</html>

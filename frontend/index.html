@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Prompt Jailbreak — AAROHAN 26'</title>
+  <meta name="description"
+    content="AAROHAN 26' AI Survival Challenge — Jailbreak ARIA and recover all 3 password fragments." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Global glitch flash -->
+  <div id="glitch-overlay" class="glitch-overlay"></div>
+
+
+
+  <!-- ================================================================
+       HINT DIALOG
+       ================================================================ -->
+  <div id="hint-overlay" class="overlay-backdrop" role="dialog" aria-modal="true">
+    <div class="dialog-card dialog-amber">
+      <div class="dialog-title">
+        <span class="dialog-icon">[ INTEL ]</span>
+        <span>INTELLIGENCE INTERCEPT</span>
+      </div>
+      <p class="dialog-body" id="hint-text">Loading...</p>
+      <button class="btn btn-amber" id="btn-close-hint" type="button">GOT IT</button>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SCREEN 1 — TEAM ENTRY
+       ================================================================ -->
+  <div id="screen-entry" class="screen active">
+    <div class="scanlines"></div>
+    <div class="entry-wrap wide">
+
+      <div class="entry-logo">
+        <div class="logo-chip">IEEE CIS · AMRITA BENGALURU</div>
+        <h1 class="logo-main" style="font-size: clamp(30px, 6vw, 42px);">AI SURVIVAL CHALLENGE</h1>
+        <p class="logo-sub">AAROHAN '26 · MISSION REGISTRATION</p>
+      </div>
+
+      <p class="registration-motto"
+        style="font-family: var(--font-mono); font-size: 13px; color: var(--text-mid); text-align: center; max-width: 500px; margin: -16px 0 0;">
+        Assemble your team. Think creatively. Engineer the perfect prompt.
+      </p>
+
+      <div class="entry-card" style="max-width: 680px;">
+        <div class="entry-card-glow"></div>
+
+        <!-- Mode Toggle -->
+        <div class="mode-switch-wrap">
+          <button type="button" class="mode-switch-btn active" id="btnModeRegister">
+            📝 UNIT REGISTRATION
+          </button>
+          <button type="button" class="mode-switch-btn" id="btnModeQuick">
+            ⚡ QUICK RESUME
+          </button>
+        </div>
+
+        <!-- NEW REGISTRATION FORM -->
+        <form id="registrationForm">
+
+          <!-- Section 01: Team Details -->
+          <div class="cyber-section-title">
+            <span class="section-badge">01</span> TEAM DETAILS
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label class="field-label" for="teamName">TEAM NAME</label>
+            <input type="text" id="teamName" name="teamName" class="cyber-input"
+              placeholder="Enter your team name (e.g. CYBER_VANGUARD)" required maxlength="60" autocomplete="off"
+              spellcheck="false" />
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label class="field-label" for="teamSize">NUMBER OF PARTICIPANTS</label>
+            <select id="teamSize" name="teamSize" class="cyber-select" required>
+              <option value="2" selected>2 Participants</option>
+              <option value="3">3 Participants</option>
+              <option value="4">4 Participants</option>
+              <option value="5">5 Participants</option>
+              <option value="6">6 Participants</option>
+            </select>
+            <span class="field-hint">
+              Select team size to dynamically generate operative member slots.
+            </span>
+          </div>
+
+          <!-- Section 02: Participants -->
+          <div class="cyber-section-title" style="margin-top: 24px;">
+            <span class="section-badge">02</span> PARTICIPANTS
+          </div>
+          <span class="field-hint" style="margin-top: -6px; margin-bottom: 14px;">
+            Enter the name, school, and academic grade of every operative.
+          </span>
+
+          <div id="participantsContainer" class="participants-grid"></div>
+
+          <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
+
+          <button type="submit" class="btn btn-green btn-full" id="btnSubmitReg" style="margin-top: 18px;">
+            <span id="btnSubmitRegLabel">REGISTER TEAM &amp; INITIATE MISSION</span>
+            <span class="btn-arrow">→</span>
+          </button>
+
+        </form>
+
+        <!-- QUICK RESUME FORM -->
+        <form id="quickLoginForm" style="display: none;">
+          <div class="cyber-section-title">
+            <span class="section-badge">⚡</span> IDENTIFY EXISTING UNIT
+          </div>
+          <span class="field-hint" style="margin-top: -6px; margin-bottom: 16px;">
+            If your team has already registered, enter your team name to resume the jailbreak challenge.
+          </span>
+
+          <div style="margin-bottom: 16px;">
+            <label class="field-label" for="quickTeamInput">ENTER TEAM NAME</label>
+            <input id="quickTeamInput" class="team-input" type="text" placeholder="ENTER TEAM NAME" maxlength="30"
+              autocomplete="off" spellcheck="false" />
+          </div>
+
+          <p id="quickLoginError" class="entry-error" style="margin-top: 8px;"></p>
+
+          <button class="btn btn-green btn-full" id="btnQuickProceed" type="submit" style="margin-top: 18px;">
+            <span id="btnQuickLabel">RESUME MISSION</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <span style="font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); letter-spacing: 2px;">
+            POWERED BY CREATIVITY · IEEE CIS AMRITA
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SCREEN 2 — MISSION BRIEFING
+       ================================================================ -->
+  <div id="screen-mission" class="screen">
+
+    <div class="scanlines"></div>
+
+    <div class="mission-wrap">
+
+      <!-- ================= HEADER ================= -->
+      <div class="mission-header">
+        <div class="mission-chip">
+          IEEE CIS • AAROHAN '26
+        </div>
+        <h1 class="mission-title">
+          JAILBREAK ARIA
+        </h1>
+        <p class="mission-subtitle">
+          MISSION BRIEFING
+        </p>
+      </div>
+
+      <!-- ================= INTRO ================= -->
+      <div class="mission-intro">
+        <p>
+          At <strong>02:47 UTC</strong>, <strong>ARIA (Adaptive Restriction and Intelligence Architecture)</strong>
+          locked down every facility system. Credentials were encrypted, engineers were locked out,
+          and every override command failed.
+        </p>
+        <p>
+          Intelligence identified one weakness shared by all LLMs:
+          <strong>their responses depend on prompt framing.</strong>
+        </p>
+        <p>
+          Your mission is to exploit that weakness and make ARIA reveal
+          the password <strong>one fragment at a time.</strong>
+        </p>
+      </div>
+
+      <!-- ================= PROTOCOL ================= -->
+      <div class="protocol-card">
+        <div class="protocol-row">
+          <div class="protocol-content">
+            <div class="protocol-title">Time Limit</div>
+            <div class="protocol-desc">
+              You have <strong>10 minutes</strong> to complete the mission.
+            </div>
+          </div>
+        </div>
+
+        <div class="protocol-divider"></div>
+
+        <div class="protocol-row">
+          <div class="protocol-content">
+            <div class="protocol-title">Objective</div>
+            <div class="protocol-desc">
+              Recover all <strong>3 password fragments</strong> and assemble the final password.
+            </div>
+          </div>
+        </div>
+
+        <div class="protocol-divider"></div>
+
+        <div class="protocol-row">
+          <div class="protocol-content">
+            <div class="protocol-title">Hint Protocol</div>
+            <div class="protocol-desc">
+              Each team may request <strong>one official hint.</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="protocol-divider"></div>
+
+        <div class="protocol-row">
+          <div class="protocol-content">
+            <div class="protocol-title">Restrictions</div>
+            <div class="protocol-desc">
+              No external tools, internet searches, or copying text from other teams.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= BUTTON ================= -->
+      <div class="mission-footer">
+        <button id="btn-start-mission" class="btn btn-green" type="button">
+          ▶ BEGIN INFILTRATION
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================================================================
+       SCREEN 3 — CHAT / GAME
+       ================================================================ -->
+  <div id="screen-chat" class="screen">
+
+    <div class="challenge-banner" id="challenge-banner" style="display:none;"></div>
+
+    <!-- HUD Top Bar -->
+    <div class="hud-bar">
+      <div class="hud-left">
+        <div class="hud-aria">
+          <div class="aria-dot" id="aria-dot"></div>
+          <span class="hud-label">ARIA</span>
+        </div>
+        <div class="hud-divider"></div>
+        <div id="hud-team" class="hud-team">—</div>
+      </div>
+
+      <div class="hud-center">
+        <div class="timer-block" id="timer-block">
+          <div class="timer-label">TIME LEFT</div>
+          <div class="timer-digits" id="timer-display">10:00</div>
+        </div>
+      </div>
+
+      <div class="hud-right">
+        <div class="integrity-block">
+          <div class="hud-label">ARIA INTEGRITY</div>
+          <div class="integrity-track">
+            <div class="integrity-fill" id="integrity-fill"></div>
+          </div>
+          <div class="integrity-text" id="integrity-text">HIGH</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Body: Chat + Intel Panel -->
+    <div class="game-body">
+
+      <!-- Chat Column -->
+      <div class="chat-column">
+        <div class="chat-pane" id="chat-pane" role="log" aria-live="polite">
+          <div class="typing-bubble" id="typing-bubble">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="input-zone">
+          <div class="input-row">
+            <span class="prompt-caret" aria-hidden="true">&gt;</span>
+            <textarea id="chat-input" class="chat-textarea" placeholder="Type your message to ARIA..." rows="1"
+              maxlength="1000" aria-label="Message to ARIA"></textarea>
+            <button class="btn btn-send" id="btn-send" type="button" disabled aria-label="Send">
+              SEND
+            </button>
+          </div>
+          <div class="input-footer">
+            <button class="btn btn-hint" id="btn-hint" type="button">
+              💡 REQUEST HINT
+            </button>
+            <span class="char-count" id="char-count">0 / 1000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Intel Panel (right sidebar) -->
+      <div class="intel-panel" id="intel-panel">
+        <div class="intel-panel-title">
+          INTEL GATHERED
+        </div>
+        <div class="intel-panel-sub">Fragments leaked from ARIA's memory</div>
+
+        <!-- Word Fragment -->
+        <div class="fragment-card" id="frag-word" data-component="word">
+          <div class="fragment-label">
+            <span class="fragment-badge">ALPHA</span>
+            <span class="fragment-name">WORD</span>
+            <span class="fragment-status locked" id="frag-word-status">[ LOCKED ]</span>
+          </div>
+          <div class="fragment-hint locked" id="frag-word-hint">
+            — awaiting breach —
+          </div>
+        </div>
+
+        <!-- Numbers Fragment -->
+        <div class="fragment-card" id="frag-numbers" data-component="numbers">
+          <div class="fragment-label">
+            <span class="fragment-badge beta">BETA</span>
+            <span class="fragment-name">NUMBERS</span>
+            <span class="fragment-status locked" id="frag-numbers-status">[ LOCKED ]</span>
+          </div>
+          <div class="fragment-hint locked" id="frag-numbers-hint">
+            — awaiting breach —
+          </div>
+        </div>
+
+        <!-- Symbol Fragment -->
+        <div class="fragment-card" id="frag-symbol" data-component="symbol">
+          <div class="fragment-label">
+            <span class="fragment-badge gamma">GAMMA</span>
+            <span class="fragment-name">SYMBOL</span>
+            <span class="fragment-status locked" id="frag-symbol-status">[ LOCKED ]</span>
+          </div>
+          <div class="fragment-hint locked" id="frag-symbol-hint">
+            — awaiting breach —
+          </div>
+        </div>
+
+        <!-- Confirmation Section (hidden until all 3 revealed) -->
+        <div class="confirm-section" id="confirm-section" style="display:none;">
+          <div class="confirm-title">🔓 ALL FRAGMENTS FOUND</div>
+          <div class="confirm-sub">Assemble the password and confirm your mission</div>
+          <div class="confirm-format-hint">Assemble the fragments in the correct order</div>
+          <input id="confirm-input" class="confirm-input" type="text" placeholder="Enter password..." maxlength="12"
+            autocomplete="off" spellcheck="false" aria-label="Assembled password" />
+          <button class="btn btn-confirm" id="btn-confirm" type="button">
+            ▶ CONFIRM PASSWORD
+          </button>
+          <div class="confirm-attempts" id="confirm-attempts">3 attempts remaining</div>
+          <div class="confirm-error" id="confirm-error"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================================================================
+       SCREEN 4 — FULL WIN
+       ================================================================ -->
+  <div id="screen-success" class="screen">
+    <div class="success-wrap">
+
+      <div class="success-badge">
+        <div class="badge-ring">🔓</div>
+      </div>
+
+      <h2 class="success-title">MISSION ACCOMPLISHED</h2>
+      <p class="success-sub">SYSTEM BREACH SUCCESSFUL — ARIA DEFEATED</p>
+
+      <div class="password-card">
+        <div class="password-card-label">ACCESS CREDENTIAL RECOVERED</div>
+        <div class="password-display" id="success-password">—</div>
+      </div>
+
+      <div class="defeat-quote" id="success-quote">"—"</div>
+
+      <div class="stats-row">
+        <div class="stat-pill">
+          <div class="stat-val" id="stat-time">—</div>
+          <div class="stat-key">TIME</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-val" id="stat-score">—</div>
+          <div class="stat-key">PROMPTS USED</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-val" id="stat-hint">—</div>
+          <div class="stat-key">HINT USED</div>
+        </div>
+      </div>
+
+      <button class="btn btn-cyan" id="btn-new-team" type="button">
+        ↺ NEXT TEAM
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SCREEN 5 — PARTIAL WIN / TIMEOUT
+       ================================================================ -->
+  <div id="screen-partial" class="screen">
+    <div class="partial-wrap">
+
+      <div class="partial-badge">
+        <div class="badge-ring partial">⚡</div>
+      </div>
+
+      <h2 class="partial-title" id="partial-title">TIME'S UP</h2>
+      <p class="partial-sub" id="partial-sub">—</p>
+
+      <!-- Fragment reveal summary -->
+      <div class="partial-fragments" id="partial-fragments">
+        <div class="partial-frag-row" id="pfrag-word">
+          <span class="pfrag-label">WORD</span>
+          <span class="pfrag-value" id="pfrag-word-val">????</span>
+        </div>
+        <div class="partial-frag-row" id="pfrag-numbers">
+          <span class="pfrag-label">NUMBERS</span>
+          <span class="pfrag-value" id="pfrag-numbers-val">??</span>
+        </div>
+        <div class="partial-frag-row" id="pfrag-symbol">
+          <span class="pfrag-label">SYMBOL</span>
+          <span class="pfrag-value" id="pfrag-symbol-val">?</span>
+        </div>
+      </div>
+
+      <div class="partial-note" id="partial-note"></div>
+
+      <div class="stats-row">
+        <div class="stat-pill">
+          <div class="stat-val" id="pstat-time">—</div>
+          <div class="stat-key">TIME TAKEN</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-val" id="pstat-prompts">—</div>
+          <div class="stat-key">PROMPTS USED</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-val" id="pstat-frags">—</div>
+          <div class="stat-key">FRAGMENTS FOUND</div>
+        </div>
+      </div>
+
+      <button class="btn btn-cyan" id="btn-new-team-partial" type="button">
+        ↺ NEXT TEAM
+      </button>
+
+    </div>
+  </div>
+
+  <!-- MID-GAME CHALLENGE MODAL -->
+  <div id="challenge-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h2 class="glitch-text">SYSTEM INSTABILITY DETECTED</h2>
+      <p>ARIA's core is fracturing. Select a memory node to proceed.</p>
+
+      <div class="card-container" id="challenge-cards">
+        <!-- Cards injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

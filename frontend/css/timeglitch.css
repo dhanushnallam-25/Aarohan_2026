@@ -1,0 +1,898 @@
+/* ==========================================================================
+   TIMEGLITCH: THE LOST SPACE TRANSMISSION
+   Isolated Scoped Stylesheet for Station 1 Game Component
+   All selectors strictly namespaced under .timeglitch-game
+   ========================================================================== */
+
+.timeglitch-game {
+  --tg-bg-deep: #050813;
+  --tg-bg-surface: rgba(13, 20, 36, 0.88);
+  --tg-bg-card: rgba(18, 28, 52, 0.82);
+  --tg-bg-input: rgba(8, 14, 26, 0.92);
+  --tg-border: rgba(0, 229, 255, 0.25);
+  --tg-border-active: #00e5ff;
+  --tg-border-correct: #00ff9d;
+  --tg-border-incorrect: #ff3b3b;
+  --tg-cyan: #00e5ff;
+  --tg-green: #00ff9d;
+  --tg-amber: #ffb703;
+  --tg-red: #ff3b3b;
+  --tg-purple: #b5179e;
+  --tg-text-main: #f0f6fc;
+  --tg-text-dim: #94a3b8;
+  --tg-text-bright: #ffffff;
+  --tg-glow-cyan: 0 0 15px rgba(0, 229, 255, 0.35);
+  --tg-glow-green: 0 0 15px rgba(0, 255, 157, 0.35);
+  --tg-glow-red: 0 0 15px rgba(255, 59, 59, 0.45);
+  --tg-font-mono: 'Share Tech Mono', monospace, Consolas, monospace;
+  --tg-font-display: 'Orbitron', sans-serif, system-ui;
+  --tg-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at 50% 20%, #101c38 0%, #070c1a 60%, #03060d 100%);
+  color: var(--tg-text-main);
+  font-family: var(--tg-font-body);
+  box-sizing: border-box;
+  padding: 80px 20px 40px;
+  overflow-x: hidden;
+}
+
+.timeglitch-game *,
+.timeglitch-game *::before,
+.timeglitch-game *::after {
+  box-sizing: border-box;
+}
+
+/* Background animated stars & scanline overlay */
+.timeglitch-game .tg-starfield {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(1px 1px at 25px 35px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 120px 80px, #00e5ff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 280px 210px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 450px 150px, #00ff9d, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 620px 320px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 800px 90px, #00e5ff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 980px 420px, #ffb703, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 1000px 600px;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.timeglitch-game .tg-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+}
+
+/* --------------------------------------------------------------------------
+   HUD Top Bar
+   -------------------------------------------------------------------------- */
+.timeglitch-game .tg-hud-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 14px 22px;
+  background: var(--tg-bg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.timeglitch-game .tg-hud-unit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.timeglitch-game .tg-mission-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(0, 229, 255, 0.12);
+  border: 1px solid var(--tg-cyan);
+  border-radius: 20px;
+  font-family: var(--tg-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tg-cyan);
+  letter-spacing: 1px;
+}
+
+.timeglitch-game .tg-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--tg-green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--tg-green);
+  animation: tgPulse 1.8s infinite;
+}
+
+@keyframes tgPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.timeglitch-game .tg-team-tag {
+  font-family: var(--tg-font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--tg-text-main);
+  letter-spacing: 0.5px;
+}
+
+.timeglitch-game .tg-score-pill {
+  font-family: var(--tg-font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tg-green);
+  padding: 5px 14px;
+  background: rgba(0, 255, 157, 0.1);
+  border: 1px solid rgba(0, 255, 157, 0.35);
+  border-radius: 20px;
+}
+
+.timeglitch-game .tg-timer-pill {
+  font-family: var(--tg-font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--tg-cyan);
+  padding: 4px 14px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 8px;
+  letter-spacing: 1px;
+}
+
+.timeglitch-game .tg-timer-pill.warning {
+  color: var(--tg-amber);
+  border-color: var(--tg-amber);
+}
+
+.timeglitch-game .tg-timer-pill.danger {
+  color: var(--tg-red);
+  border-color: var(--tg-red);
+  animation: tgPulse 1s infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Team Selection / Resume Screen
+   -------------------------------------------------------------------------- */
+.timeglitch-game .tg-screen-entry {
+  max-width: 520px;
+  margin: 40px auto 0;
+  padding: 34px;
+  background: var(--tg-bg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  backdrop-filter: blur(12px);
+}
+
+.timeglitch-game .tg-logo-title {
+  font-family: var(--tg-font-display);
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: var(--tg-cyan);
+  text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+  margin-bottom: 6px;
+}
+
+.timeglitch-game .tg-logo-subtitle {
+  font-family: var(--tg-font-mono);
+  font-size: 12.5px;
+  color: var(--tg-text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+
+.timeglitch-game .tg-field-label {
+  display: block;
+  font-family: var(--tg-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--tg-text-dim);
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+.timeglitch-game .tg-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--tg-bg-input);
+  border: 1px solid var(--tg-border);
+  border-radius: 8px;
+  color: var(--tg-text-main);
+  font-family: var(--tg-font-mono);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.25s ease;
+  margin-bottom: 16px;
+}
+
+.timeglitch-game .tg-input:focus {
+  border-color: var(--tg-cyan);
+  box-shadow: var(--tg-glow-cyan);
+}
+
+.timeglitch-game .tg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: var(--tg-font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.timeglitch-game .tg-btn-full {
+  width: 100%;
+}
+
+.timeglitch-game .tg-btn-primary {
+  background: linear-gradient(135deg, #00e5ff 0%, #00ff9d 100%);
+  color: #040914;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+}
+
+.timeglitch-game .tg-btn-primary:hover:not(:disabled) {
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.7);
+  transform: translateY(-2px);
+}
+
+.timeglitch-game .tg-btn-secondary {
+  background: rgba(18, 28, 52, 0.8);
+  border: 1px solid var(--tg-border);
+  color: var(--tg-text-main);
+}
+
+.timeglitch-game .tg-btn-secondary:hover:not(:disabled) {
+  border-color: var(--tg-cyan);
+  color: var(--tg-cyan);
+}
+
+.timeglitch-game .tg-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.timeglitch-game .tg-alert {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.timeglitch-game .tg-alert-error {
+  background: rgba(255, 59, 59, 0.12);
+  border: 1px solid var(--tg-red);
+  color: #ff9e9e;
+}
+
+.timeglitch-game .tg-alert-success {
+  background: rgba(0, 255, 157, 0.12);
+  border: 1px solid var(--tg-green);
+  color: var(--tg-green);
+}
+
+/* --------------------------------------------------------------------------
+   Storyline & Mission Briefing Header
+   -------------------------------------------------------------------------- */
+.timeglitch-game .tg-mission-header {
+  background: var(--tg-bg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.timeglitch-game .tg-mission-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--tg-cyan), var(--tg-green));
+}
+
+.timeglitch-game .tg-round-title {
+  font-family: var(--tg-font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--tg-cyan);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timeglitch-game .tg-story-text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--tg-text-dim);
+  max-width: 900px;
+}
+
+.timeglitch-game .tg-story-text strong {
+  color: var(--tg-text-main);
+}
+
+/* --------------------------------------------------------------------------
+   ROUND 1: Timeline Interface
+   -------------------------------------------------------------------------- */
+.timeglitch-game .tg-timeline-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.timeglitch-game .tg-direction-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--tg-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--tg-amber);
+  letter-spacing: 0.5px;
+}
+
+.timeglitch-game .tg-slots-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 992px) {
+  .timeglitch-game .tg-slots-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.timeglitch-game .tg-timeline-slot {
+  background: rgba(14, 22, 40, 0.7);
+  border: 2px dashed rgba(0, 229, 255, 0.35);
+  border-radius: 12px;
+  min-height: 220px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.timeglitch-game .tg-slot-header {
+  font-family: var(--tg-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tg-cyan);
+  letter-spacing: 1px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.timeglitch-game .tg-timeline-slot.drag-over {
+  border-color: var(--tg-cyan);
+  background: rgba(0, 229, 255, 0.08);
+  box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.2);
+}
+
+.timeglitch-game .tg-timeline-slot.slot-incorrect {
+  border: 2px solid var(--tg-red) !important;
+  box-shadow: var(--tg-glow-red) !important;
+  background: rgba(255, 59, 59, 0.08) !important;
+}
+
+.timeglitch-game .tg-timeline-slot.slot-correct {
+  border: 2px solid var(--tg-green) !important;
+  box-shadow: var(--tg-glow-green) !important;
+  background: rgba(0, 255, 157, 0.08) !important;
+}
+
+.timeglitch-game .tg-slot-empty-notice {
+  margin: auto;
+  text-align: center;
+  font-family: var(--tg-font-mono);
+  font-size: 11.5px;
+  color: var(--tg-text-dim);
+  padding: 16px 8px;
+  pointer-events: none;
+}
+
+/* Event Cards (In Deck or In Slots) */
+.timeglitch-game .tg-cards-deck {
+  background: var(--tg-bg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.timeglitch-game .tg-deck-title {
+  font-family: var(--tg-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--tg-text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.timeglitch-game .tg-deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.timeglitch-game .tg-event-card {
+  background: var(--tg-bg-card);
+  border: 1px solid var(--tg-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: grab;
+  user-select: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.timeglitch-game .tg-event-card:hover {
+  border-color: var(--tg-cyan);
+  box-shadow: var(--tg-glow-cyan);
+  transform: translateY(-2px);
+}
+
+.timeglitch-game .tg-event-card.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.timeglitch-game .tg-event-card.card-selected {
+  border-color: var(--tg-cyan) !important;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.6) !important;
+  background: rgba(0, 229, 255, 0.12) !important;
+}
+
+.timeglitch-game .tg-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.timeglitch-game .tg-card-year {
+  font-family: var(--tg-font-display);
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--tg-cyan);
+}
+
+.timeglitch-game .tg-card-agency {
+  font-family: var(--tg-font-mono);
+  font-size: 9.5px;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: var(--tg-text-dim);
+}
+
+.timeglitch-game .tg-card-title {
+  font-family: var(--tg-font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--tg-text-bright);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.timeglitch-game .tg-card-desc {
+  font-size: 11px;
+  color: var(--tg-text-dim);
+  line-height: 1.45;
+  flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   ROUND 2: CHRONOS AI & PROMPT ENGINEERING PANEL
+   -------------------------------------------------------------------------- */
+.timeglitch-game .tg-round2-container {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .timeglitch-game .tg-round2-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.timeglitch-game .tg-chat-panel {
+  background: var(--tg-bg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  min-height: 580px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.timeglitch-game .tg-chat-header {
+  padding: 16px 20px;
+  background: rgba(10, 16, 30, 0.95);
+  border-bottom: 1px solid var(--tg-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeglitch-game .tg-chat-title {
+  font-family: var(--tg-font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--tg-cyan);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeglitch-game .tg-chat-history {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timeglitch-game .tg-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 90%;
+  animation: tgFadeIn 0.3s ease;
+}
+
+@keyframes tgFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.timeglitch-game .tg-msg.user {
+  align-self: flex-end;
+}
+
+.timeglitch-game .tg-msg.ai {
+  align-self: flex-start;
+}
+
+.timeglitch-game .tg-msg-author {
+  font-family: var(--tg-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--tg-text-dim);
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.timeglitch-game .tg-msg.user .tg-msg-author {
+  text-align: right;
+  color: var(--tg-cyan);
+}
+
+.timeglitch-game .tg-msg.ai .tg-msg-author {
+  color: var(--tg-green);
+}
+
+.timeglitch-game .tg-msg-bubble {
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.timeglitch-game .tg-msg.user .tg-msg-bubble {
+  background: rgba(0, 229, 255, 0.12);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  color: #e0f2fe;
+}
+
+.timeglitch-game .tg-msg.ai .tg-msg-bubble {
+  background: rgba(18, 28, 52, 0.95);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+  color: var(--tg-text-main);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Chat Input Zone */
+.timeglitch-game .tg-input-zone {
+  padding: 16px 20px;
+  background: rgba(10, 16, 30, 0.95);
+  border-top: 1px solid var(--tg-border);
+}
+
+.timeglitch-game .tg-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--tg-bg-input);
+  border: 1px solid var(--tg-border);
+  border-radius: 8px;
+  color: var(--tg-text-main);
+  font-family: var(--tg-font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 75px;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.timeglitch-game .tg-textarea:focus {
+  border-color: var(--tg-cyan);
+  box-shadow: var(--tg-glow-cyan);
+}
+
+.timeglitch-game .tg-input-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.timeglitch-game .tg-char-counter {
+  font-family: var(--tg-font-mono);
+  font-size: 11px;
+  color: var(--tg-text-dim);
+}
+
+/* Sidebar: Transmission Intel & Prompt Analysis */
+.timeglitch-game .tg-intel-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.timeglitch-game .tg-transmission-card {
+  background: var(--tg-bg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.timeglitch-game .tg-transmission-title {
+  font-family: var(--tg-font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--tg-amber);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timeglitch-game .tg-ciphertext-box {
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 183, 3, 0.35);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+  font-family: var(--tg-font-mono);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--tg-amber);
+  margin-bottom: 12px;
+  box-shadow: inset 0 0 10px rgba(255, 183, 3, 0.15);
+}
+
+.timeglitch-game .tg-cipher-notes {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--tg-text-dim);
+}
+
+/* Live Evaluation Card */
+.timeglitch-game .tg-eval-card {
+  background: var(--tg-bg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.timeglitch-game .tg-eval-title {
+  font-family: var(--tg-font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--tg-cyan);
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeglitch-game .tg-criteria-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.timeglitch-game .tg-criteria-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(18, 28, 52, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.timeglitch-game .tg-criteria-score {
+  font-family: var(--tg-font-mono);
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.timeglitch-game .tg-criteria-score.score-2 {
+  background: rgba(0, 255, 157, 0.15);
+  color: var(--tg-green);
+  border: 1px solid var(--tg-green);
+}
+
+.timeglitch-game .tg-criteria-score.score-1 {
+  background: rgba(255, 183, 3, 0.15);
+  color: var(--tg-amber);
+  border: 1px solid var(--tg-amber);
+}
+
+.timeglitch-game .tg-criteria-score.score-0 {
+  background: rgba(255, 59, 59, 0.15);
+  color: var(--tg-red);
+  border: 1px solid var(--tg-red);
+}
+
+.timeglitch-game .tg-suggestion-box {
+  padding: 10px 12px;
+  background: rgba(0, 229, 255, 0.08);
+  border-left: 3px solid var(--tg-cyan);
+  border-radius: 4px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #bae6fd;
+}
+
+/* --------------------------------------------------------------------------
+   Mission Completion Debriefing Modal / Screen
+   -------------------------------------------------------------------------- */
+.timeglitch-game .tg-debrief-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(3, 6, 13, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.timeglitch-game .tg-debrief-card {
+  background: var(--tg-bg-surface);
+  border: 1px solid var(--tg-border-active);
+  border-radius: 16px;
+  max-width: 620px;
+  width: 100%;
+  padding: 36px;
+  text-align: center;
+  box-shadow: 0 0 50px rgba(0, 229, 255, 0.35);
+  animation: tgPopIn 0.35s ease;
+}
+
+@keyframes tgPopIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.timeglitch-game .tg-debrief-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.timeglitch-game .tg-debrief-title {
+  font-family: var(--tg-font-display);
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--tg-cyan);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.timeglitch-game .tg-debrief-sub {
+  font-size: 13.5px;
+  color: var(--tg-text-dim);
+  margin-bottom: 24px;
+}
+
+.timeglitch-game .tg-score-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.timeglitch-game .tg-breakdown-box {
+  background: rgba(18, 28, 52, 0.8);
+  border: 1px solid var(--tg-border);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.timeglitch-game .tg-breakdown-val {
+  font-family: var(--tg-font-display);
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--tg-green);
+  margin-bottom: 4px;
+}
+
+.timeglitch-game .tg-breakdown-label {
+  font-family: var(--tg-font-mono);
+  font-size: 11px;
+  color: var(--tg-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

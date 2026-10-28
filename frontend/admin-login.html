@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Authentication — AAROHAN 26'</title>
+  <meta name="description" content="Aarohan '26 Central Admin Portal Authentication" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .admin-form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .admin-error-box {
+      margin-top: 14px;
+      padding: 10px 14px;
+      background: rgba(255, 59, 59, 0.12);
+      border: 1px solid rgba(255, 59, 59, 0.4);
+      border-radius: var(--radius-sm);
+      color: #ff8b9a;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      display: none;
+    }
+    .quick-cred-box {
+      margin-bottom: 22px;
+      padding: 12px 14px;
+      background: rgba(0, 229, 255, 0.08);
+      border: 1px dashed rgba(0, 229, 255, 0.3);
+      border-radius: var(--radius-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    .quick-fill-btn {
+      padding: 5px 10px;
+      background: rgba(0, 229, 255, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-hud);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+    }
+    .quick-fill-btn:hover {
+      background: var(--cyan);
+      color: #050a0e;
+      box-shadow: 0 0 12px var(--cyan);
+    }
+    .nav-back-link {
+      margin-top: 24px;
+      color: var(--text-mid);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-back-link:hover {
+      color: var(--green);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scanlines"></div>
+
+  <div id="screen-entry" class="screen active" style="justify-content: center;">
+    <div class="entry-wrap">
+
+      <div class="entry-logo">
+        <div class="logo-chip">IEEE CIS · AMRITA BENGALURU</div>
+        <h1 class="logo-main" style="font-size: 38px;">CENTRAL COMMAND</h1>
+        <p class="logo-sub">AAROHAN '26 ADMIN CONSOLE</p>
+      </div>
+
+      <div class="entry-card" style="max-width: 440px;">
+        <div class="entry-card-glow"></div>
+
+
+        <form id="adminLoginForm">
+          <div class="admin-form-group">
+            <label class="field-label" for="adminId">ADMINISTRATOR ID</label>
+            <input
+              id="adminId"
+              class="team-input"
+              type="text"
+              placeholder="ENTER ADMIN ID"
+              autocomplete="username"
+              required
+              autofocus
+            />
+          </div>
+
+          <div class="admin-form-group">
+            <label class="field-label" for="accessKey">ACCESS KEY</label>
+            <input
+              id="accessKey"
+              class="team-input"
+              type="password"
+              placeholder="ENTER ACCESS KEY"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+
+          <div id="loginError" class="admin-error-box"></div>
+
+          <button class="btn btn-green btn-full" id="btnSubmitLogin" type="submit" style="margin-top: 14px;">
+            <span id="btnLoginLabel">AUTHENTICATE</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
+
+        <div style="text-align: center;">
+          <a href="index.html" class="nav-back-link">
+            ← RETURN TO TERMINAL
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('adminLoginForm');
+    const idInput = document.getElementById('adminId');
+    const keyInput = document.getElementById('accessKey');
+    const loginError = document.getElementById('loginError');
+    const submitBtn = document.getElementById('btnSubmitLogin');
+    const submitLabel = document.getElementById('btnLoginLabel');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginError.style.display = 'none';
+
+      const u = idInput.value.trim().toLowerCase();
+      const p = keyInput.value.trim();
+
+      submitBtn.disabled = true;
+      submitLabel.textContent = 'VERIFYING...';
+
+      // Verify credentials (supports backend if live, otherwise client check)
+      let authorized = false;
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        });
+        if (res.ok) {
+          authorized = true;
+        }
+      } catch (err) {}
+
+      if (!authorized) {
+        if ((u === 'admin' || u === 'admin@aarohan.org') && p === 'aarohan2026') {
+          authorized = true;
+        }
+      }
+
+      setTimeout(() => {
+        if (authorized) {
+          sessionStorage.setItem('aarohan_admin_logged_in', 'true');
+          sessionStorage.setItem('aarohan_admin_user', 'Aarohan Administrator');
+          submitLabel.textContent = 'ACCESS GRANTED ✓';
+          setTimeout(() => {
+            window.location.href = 'admin.html';
+          }, 350);
+        } else {
+          loginError.textContent = 'ACCESS DENIED: Invalid administrator ID or access key.';
+          loginError.style.display = 'block';
+          submitBtn.disabled = false;
+          submitLabel.textContent = 'AUTHENTICATE';
+          keyInput.value = '';
+          keyInput.focus();
+        }
+      }, 350);
+    });
+  </script>
+</body>
+</html>
