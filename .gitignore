@@ -1,0 +1,18 @@
+.env
+.venv
+__pycache__
+
+# Secret files - ignore all files that may contain credentials or sensitive data
+*.env
+*.env.*
+*.pem
+*.key
+*.crt
+*.secret
+*.enc
+*.crypt
+secrets.yml
+secrets.json
+credentials.*
+.id_rsa
+.id_rsa.pub
